@@ -81,7 +81,6 @@ void put_mlq_proc(struct pcb_t * proc) {
 void add_mlq_proc(struct pcb_t * proc) {
 	pthread_mutex_lock(&queue_lock);
 	enqueue(&mlq_ready_queue[proc->prio], proc);
-	dequeue_running(&running_list, proc);
 	pthread_mutex_unlock(&queue_lock);	
 }
 
