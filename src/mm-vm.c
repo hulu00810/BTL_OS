@@ -120,8 +120,8 @@ struct vm_rg_struct *get_vm_area_node_at_brk(struct pcb_t *caller, int vmaid, in
    struct vm_rg_struct *region = get_vm_area_node_at_brk(caller, vmaid, inc_sz, PAGING_PAGESZ);
    struct vm_area_struct *cur_vma = get_vma_by_num(caller->mm, vmaid);
    if (region == NULL) return -1; // Không thể tạo vùng nhớ mới
- 
-   int old_end = cur_vma->vm_end;
+
+   int old_end = cur_vma->vm_end; // Lưu lại điểm cuối cũ của vùng nhớ
  
    if (validate_overlap_vm_area(caller, vmaid, region->rg_start, region->rg_end) == -1) return -1; // Trùng vùng nhớ, không cấp phát
  
@@ -130,9 +130,8 @@ struct vm_rg_struct *get_vm_area_node_at_brk(struct pcb_t *caller, int vmaid, in
  
    if (vm_map_ram(caller, region->rg_start, region->rg_end, 
                      old_end, incnumpage , newrg) < 0){
-     free(newrg);
-     cur_vma->vm_end = old_end;
-     return -1; // Không thể ánh xạ vùng nhớ vào RAM
+      free(newrg);
+      return -1; // Không thể ánh xạ vùng nhớ vào RAM
    }
  
    return 0;

@@ -130,6 +130,7 @@ int __alloc(struct pcb_t *caller, int vmaid, int rgid, int size, int *alloc_addr
   }
 
   int old_sbrk = cur_vma->sbrk;
+  int old_end = cur_vma->vm_end;
 
   struct sc_regs regs;
   regs.a1 = SYSMEM_INC_OP;
@@ -139,6 +140,7 @@ int __alloc(struct pcb_t *caller, int vmaid, int rgid, int size, int *alloc_addr
   // Gọi syscall để mở rộng vùng nhớ
   if(syscall(caller, 17, &regs) < 0)
   {
+    cur_vma->vm_end = old_end;
     cur_vma->sbrk = old_sbrk;
     pthread_mutex_unlock(&mmvm_lock);
     return -1;
