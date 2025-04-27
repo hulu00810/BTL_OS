@@ -39,21 +39,21 @@ struct pcb_t * dequeue(struct queue_t * q) {
         return proc;
 }
 
-int dequeue_running(struct queue_t *q, struct pcb_t *proc) {
-        if (empty(q)) return 0;
-    
-        for (int i = 0; i < q->size; i++) {
-                //Kiểm tra pid của process trong hàng đợi
-            if (q->proc[i] && q->proc[i]->pid == proc->pid) {
-                // Dịch các tiến trình phía sau lên một vị trí
-                for (int j = i; j < q->size - 1; j++) {
-                    q->proc[j] = q->proc[j + 1];
-                }
-                q->proc[q->size - 1] = NULL;
-                q->size--;
-                return 1; // Đã xoá thành công
-            }
-        }
-        return 0; // Không tìm thấy
-}
 
+int dequeue_running(struct queue_t *q, struct pcb_t *proc) {
+	if (empty(q)) return -1;
+
+	for (int i = 0; i < q->size; i++) {
+			//Kiểm tra pid của process trong hàng đợi
+		if (q->proc[i] && q->proc[i]->pid == proc->pid) {
+			// Dịch các tiến trình phía sau lên một vị trí
+			for (int j = i; j < q->size - 1; j++) {
+				q->proc[j] = q->proc[j + 1];
+			}
+			q->proc[q->size - 1] = NULL;
+			q->size--;
+			return 0; // Đã xoá thành công
+		}
+	}
+	return -1; // Không tìm thấy
+}

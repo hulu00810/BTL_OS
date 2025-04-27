@@ -41,7 +41,7 @@ int __sys_killall(struct pcb_t *caller, struct sc_regs* regs)
     for (int i = 0; i < run_list->size; i++) {
         struct pcb_t *curr_proc_r = run_list->proc[i];
         
-        if (curr_proc_r == NULL || curr_proc_r->path == NULL) continue;
+        if (curr_proc_r == NULL) continue;
 
         // Nếu tên tiến trình chứa proc_name thì "dừng" nó bằng cách đặt PC về cuối code
         if (strstr(curr_proc_r->path, proc_name)) {
